@@ -16,7 +16,7 @@ struct MovieCard: View {
 
     var body: some View {
         HStack {
-            Image(systemName: "bell")
+            Image("Banner")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: mainBounds / 7 , height: mainBounds / 5)
@@ -24,17 +24,19 @@ struct MovieCard: View {
                 .background(Color.green)
                 .cornerRadius(10)
                 .padding(10)
-
             
-            VStack(alignment: .leading, spacing: 10){
+            VStack(alignment: .leading, spacing: 10) {
+                
                 Text(data.title)
                     .foregroundColor(.black)
-                Text(data.genre)
+                Text("\(data.genre) (\(data.year))")
                     .foregroundColor(.gray)
                     .font(.caption)
 
             }
+            
             Spacer()
+            
         }
         .background(Color.white)
         .cornerRadius(10)

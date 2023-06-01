@@ -8,31 +8,22 @@
 import SwiftUI
 
 struct MoviesCollectionView : View {
-    
-    @Binding var grid : [Int]
+        
     @Binding var data : [Movie]
     
     var body: some View {
-        VStack {
+        ScrollView(.vertical, showsIndicators: false) {
             
-            if !self.grid.isEmpty {
+            if self.data.count != 0 {
                 
-                ScrollView(.vertical, showsIndicators: false) {
-                    self.gridContent()
+                ForEach(0..<data.count, id: \.self) { i in
+                    NavigationLink(destination: InDetailView(data: data[i])) {
+                        MovieCard(data: data[i])
+                            .padding(.horizontal)
+                    } 
                 }
             }
         }
-    }
-    
-    private func gridContent() -> some View {
-        return VStack(spacing : 12) {
-           
-            ForEach(self.grid, id: \.self) { i in
-                NavigationLink(destination: InDetailView(data: data[i])){
-                    MovieCard(data: data[i])
-                }
-            }
-        }
-        .padding()
     }
 }
+
