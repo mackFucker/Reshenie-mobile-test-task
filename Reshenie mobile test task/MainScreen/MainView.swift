@@ -7,17 +7,18 @@
 
 import SwiftUI
 
-
 struct MainView: View {
     @StateObject private var viewModel = MovieViewModel()
     
     var body: some View {
         NavigationView {
-            //на начало редактирования филтр дата
-            //афк дефолт дата
-            MoviesCollectionView(data: self.$viewModel.filteredData)
+            MoviesCollectionView(data: viewModel.searchIsActive ? self.$viewModel.filteredData : self.$viewModel.data)
+                .animation(.easeIn(duration: 0.2))
+            
                 .toolbar {
-                    CustomNavigationBar(searchText: $viewModel.searchText, title: "Фильмы")
+                    CustomNavigationBar(showSearchBar: $viewModel.searchIsActive,
+                                        searchText: $viewModel.searchText,
+                                        title: "Фильмы")
                 }
         }
     }

@@ -10,34 +10,26 @@ import Combine
 
 final class MovieViewModel: ObservableObject {
     
-    @Published var data: [Movie] = [Movie(image: "",
-                                          title: "Это всё?",
-                                          genres: ["gay"],
-                                          description: "Сопротивление собирает отряд для выполнения особой миссии - надо выкрасть чертежи самого совершенного и мертоносного оружия Империи. Не всем суждено вернуться домой, но герои готовы к этому, ведь на кону судьба Галактики",
-                                          countries: ["gay land"], year: "2077"),
-                                    Movie(image: "",
-                                          title: "SOSAT",
-                                          genres: ["gay"],
-                                          description: "Сопротивление собирает отряд для выполнения особой миссии - надо выкрасть чертежи самого совершенного и мертоносного оружия Империи. Не всем суждено вернуться домой, но герои готовы к этому, ведь на кону судьба Галактики",
-                                          countries: ["gay land"], year: "2077"),
-                                    Movie(image: "",
-                                          title: "SOSAT2",
-                                          genres: ["gay"],
-                                          description: "Сопротивление собирает отряд для выполнения особой миссии - надо выкрасть чертежи самого совершенного и мертоносного оружия Империи. Не всем суждено вернуться домой, но герои готовы к этому, ведь на кону судьба Галактики",
-                                          countries: ["gay land"], year: "2077")]
+    @Published var data: [Movie] = []
     
-    @Published var filteredData = [Movie]()
+    @Published var filteredData: [Movie] = []
     @Published var searchText = ""
+    @Published var searchIsActive = false
     
     private var cancellables = Set<AnyCancellable>()
-    
+    private var networkManager: AnyNetworkManager<URLSession>?
+
+    var res: AnyCancellable?
+
     init() {
-        addSubscribers()
+        addSubscriberSearch()
+        addSubscriberNetworkManager()
     }
     
-    func addSubscribers() {
+    private func addSubscriberSearch() {
         $searchText
             .combineLatest(self.$data)
+            .debounce(for: 0.4, scheduler: DispatchQueue.main)
             .map(filterFilms)
             .sink { [weak self] (returnedData) in
                 self?.filteredData = returnedData
@@ -47,15 +39,37 @@ final class MovieViewModel: ObservableObject {
     
     private func filterFilms(text: String, films: [Movie]) -> [Movie] {
         guard !text.isEmpty else {
-            return data
+            return [Movie]()
         }
-        
+
         let lowercaseText = text.lowercased()
-        
+
         return data.filter { (film) -> Bool in
-            return film.title.lowercased().contains(lowercaseText)
+            return film.films[0].nameRu.lowercased().contains(lowercaseText)
         }
+        
     }
     
-    
+    private func addSubscriberNetworkManager() {
+        self.networkManager = AnyNetworkManager(manager: NetworkManager(session: URLSession.shared))
+        
+        res = networkManager?.fetch(url: URL(string: "https://kinopoiskapiunofficial.tech/api/v2.2/films/top?type=TOP_250_BEST_FILMS&page=1")!,
+                                    method: .get,
+                                    headers: ["accept": "application/json",
+                                              "X-API-KEY": "0fd0e482-e585-4c4a-bd33-26986a07b728"])
+        
+            .sink(receiveCompletion: {comp in
+                print (comp)},
+                  receiveValue: {
+                val in
+                let decode = JSONDecoder()
+                let decoded = try? decode.decode(Movie.self, from: val)
+                print([decode])
+                
+                self.data = [decoded!]
+                
+                print(self.data)
+            })
+
+    }
 }

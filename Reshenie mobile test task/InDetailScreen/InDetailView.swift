@@ -6,12 +6,13 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct InDetailView: View {
     
     @Environment(\.dismiss) private var dismiss
 
-    var data: Movie
+    var data: Film
     private let mainBoundsWidht = UIScreen.main.bounds.width
     private let mainBoundsHeight = UIScreen.main.bounds.height
 
@@ -20,34 +21,36 @@ struct InDetailView: View {
         ZStack {
             ScrollView(.vertical, showsIndicators: false) {
                 
-                Image("Banner")
+                WebImage(url: URL(string: data.posterURL))
                     .resizable()
-                    .background(Color.red)
+                    .transition(.fade(duration: 0.5))
+                    .scaledToFit()
                     .aspectRatio(contentMode: .fill)
                     .clipped()
                 
+                
                 Spacer()
                 
-                Text(data.title)
+                Text(data.nameRu)
                     .bold()
                 
                 Spacer()
                 
                 VStack(alignment: .leading) {
                     
-                    Text(data.description)
+                    Text("description")
                         .font(.caption)
                         .foregroundColor(.gray)
                     
                     Spacer()
                     
-                    Text("жанр: ").foregroundColor(.gray).font(.caption).bold() + Text(data.genre)
+                    Text("жанр: ").foregroundColor(.gray).font(.caption).bold() + Text(data.genres[0].genre)
                         .font(.caption)
                         .foregroundColor(.gray)
                     
                     Spacer()
                     
-                    Text("Страны: ").foregroundColor(.gray).font(.caption).bold() + Text(data.countries[0])
+                    Text("Страны: ").foregroundColor(.gray).font(.caption).bold() + Text(data.countries[0].country)
                         .font(.caption)
                         .foregroundColor(.gray)
                     
@@ -76,9 +79,9 @@ struct InDetailView: View {
     }
 }
 
-struct InDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        InDetailView(data: Movie(image: "", title: "SOSAT", genres: ["gay"], description: "ddddd", countries: ["gay land"], year: "2077"))
-    }
-}
+//struct InDetailView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        InDetailView(data: Movie(image: "", title: "SOSAT", genres: ["gay"], description: "ddddd", countries: ["gay land"], year: "2077"))
+//    }
+//}
 

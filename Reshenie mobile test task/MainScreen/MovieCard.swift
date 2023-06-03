@@ -6,46 +6,61 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct MovieCard: View {
     
-    var data: Movie
+    var data: Film
     private let mainBounds = UIScreen.main.bounds.width
     
     @Environment (\.colorScheme) var colorScheme
-
+    var backgroundColor: Color{
+        if colorScheme == .dark {
+            return Color(UIColor.darkText)
+        }
+        else {
+            return .white
+        }
+    }
+    
+    private let mainBoundsHeight = UIScreen.main.bounds.height
+    
     var body: some View {
         HStack {
-            Image("Banner")
+            WebImage(url: URL(string: data.posterURLPreview))
                 .resizable()
+                .placeholder(Image(systemName: "photo"))
+                .placeholder {
+                    Rectangle().foregroundColor(.gray)
+                }
+                .indicator(.activity)
+                .transition(.fade(duration: 0.5))
+                .scaledToFit()
+            
                 .aspectRatio(contentMode: .fill)
                 .frame(width: mainBounds / 7 , height: mainBounds / 5)
                 .clipped()
-                .background(Color.green)
+                .background(Color.gray)
                 .cornerRadius(10)
                 .padding(10)
             
             VStack(alignment: .leading, spacing: 10) {
                 
-                Text(data.title)
-                    .foregroundColor(.black)
-                Text("\(data.genre) (\(data.year))")
+                Text(data.nameRu)
+                    .foregroundColor(Color(UIColor.label))
+                Text("\(data.genres[0].genre) (\(data.year))")
                     .foregroundColor(.gray)
                     .font(.caption)
-
+                
             }
             
             Spacer()
             
         }
-        .background(Color.white)
+        .frame(height: mainBoundsHeight / 8)
+        .background(backgroundColor)
         .cornerRadius(10)
         .shadow(radius: 10)
     }
 }
 
-struct MovieCard_Previews: PreviewProvider {
-    static var previews: some View {
-        MovieCard(data: Movie(image: "", title: "SOSAT", genres: ["gay"], description: "ddddd", countries: ["gay land"], year: "2077"))
-    }
-}

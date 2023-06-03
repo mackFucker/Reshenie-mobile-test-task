@@ -10,8 +10,9 @@ import SwiftUI
 struct CustomNavigationBar: View {
     private let mainBounds = UIScreen.main.bounds.width
 
-    @State var showSearchBar = false
+    @Binding var showSearchBar: Bool
     @Binding var searchText: String
+    
     var title: String
     
     var body: some View {
