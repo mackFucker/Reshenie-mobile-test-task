@@ -16,9 +16,9 @@ struct MoviesCollectionView : View {
             
             if self.data.count != 0 {
                 
-                ForEach(0..<data[0].films.count, id: \.self) { i in
-                    NavigationLink(destination: InDetailView(data: data[0].films[i])) {
-                        MovieCard(data: data[0].films[i])
+                ForEach(0..<data.count, id: \.self) { i in
+                    NavigationLink(destination: InDetailView(data: data[i])) {
+                        MovieCard(data: data[i])
                             .padding(.horizontal)
                     }
                 }

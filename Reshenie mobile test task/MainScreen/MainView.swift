@@ -12,9 +12,11 @@ struct MainView: View {
     
     var body: some View {
         NavigationView {
-            MoviesCollectionView(data: viewModel.searchIsActive ? self.$viewModel.filteredData : self.$viewModel.data)
-                .animation(.easeIn(duration: 0.2))
+//            MoviesCollectionView(data: viewModel.searchIsActive ? self.$viewModel.filteredData : self.$viewModel.data)
+//                .animation(.easeIn(duration: 0.2))
             
+            MoviesCollectionView(data: self.$viewModel.data)
+                .animation(.easeIn(duration: 0.2))
                 .toolbar {
                     CustomNavigationBar(showSearchBar: $viewModel.searchIsActive,
                                         searchText: $viewModel.searchText,

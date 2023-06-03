@@ -12,7 +12,7 @@ struct InDetailView: View {
     
     @Environment(\.dismiss) private var dismiss
 
-    var data: Film
+    var data: Movie
     private let mainBoundsWidht = UIScreen.main.bounds.width
     private let mainBoundsHeight = UIScreen.main.bounds.height
 
@@ -21,7 +21,7 @@ struct InDetailView: View {
         ZStack {
             ScrollView(.vertical, showsIndicators: false) {
                 
-                WebImage(url: URL(string: data.posterURL))
+                WebImage(url: URL(string: "data.posterURL"))
                     .resizable()
                     .transition(.fade(duration: 0.5))
                     .scaledToFit()
@@ -31,7 +31,7 @@ struct InDetailView: View {
                 
                 Spacer()
                 
-                Text(data.nameRu)
+                Text("data.nameRu")
                     .bold()
                 
                 Spacer()
@@ -44,19 +44,19 @@ struct InDetailView: View {
                     
                     Spacer()
                     
-                    Text("жанр: ").foregroundColor(.gray).font(.caption).bold() + Text(data.genres[0].genre)
+                    Text("жанр: ").foregroundColor(.gray).font(.caption).bold() + Text("data.genres[0].genre")
                         .font(.caption)
                         .foregroundColor(.gray)
                     
                     Spacer()
                     
-                    Text("Страны: ").foregroundColor(.gray).font(.caption).bold() + Text(data.countries[0].country)
+                    Text("Страны: ").foregroundColor(.gray).font(.caption).bold() + Text("data.countries[0].country")
                         .font(.caption)
                         .foregroundColor(.gray)
                     
                     Spacer()
                     
-                    Text("год: ").foregroundColor(.gray).font(.caption).bold() + Text(data.year)
+                    Text("год: ").foregroundColor(.gray).font(.caption).bold() + Text("data.year")
                         .font(.caption)
                         .foregroundColor(.gray)
                     
