@@ -22,17 +22,12 @@ struct MainView: View {
                     MoviesCollectionView(data: viewModel.searchIsActive ? self.$viewModel.filteredData : self.$viewModel.data,
                                          viewModel: viewModel)
                                     .animation(.easeIn(duration: 0.2))
-                    
+
                     case .noConnection:
-                        Image(systemName: "icloud.slash")
-                        Button("Повторить", action: {
-                            print("Повторить")
-                        })
-                        .foregroundColor(.mainlPurple)
-                        .cornerRadius(10)
+                        NoConnectionView()
                     
                     case .notFound:
-                        Text("Не найдено")
+                        NotFoundView()
                 }
             }.toolbar {
                 CustomNavigationBar(showSearchBar: $viewModel.searchIsActive,
