@@ -42,6 +42,9 @@ final class MovieViewModel: ObservableObject {
                 .debounce(for: 0.4, scheduler: DispatchQueue.main)
                 .map(filterFilms)
                 .sink { [weak self] (returnedData) in
+                    if returnedData.isEmpty && !self!.searchText.isEmpty {
+                        self!.appState = .notFound
+                    }
                     self?.filteredData = returnedData
                 }
                 .store(in: &cancellables)
@@ -49,11 +52,12 @@ final class MovieViewModel: ObservableObject {
     
     private func filterFilms(text: String, films: [Film]) -> [Film] {
         guard !text.isEmpty else {
+            appState = .normal
             return [Film]()
         }
 
         let lowercaseText = text.lowercased()
-    
+        
         return films.filter { (film) -> Bool in
             return film.nameRu.lowercased().contains(lowercaseText)
         }
