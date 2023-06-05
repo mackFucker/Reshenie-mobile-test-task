@@ -34,7 +34,7 @@ struct CustomNavigationBar: View {
                 }
             }, label: {
                 Image(systemName: "arrow.left")
-                    .foregroundColor(Color.purple)
+                    .foregroundColor(.mainlPurple)
             })
             
             SearchBar(text: $searchText)
@@ -58,7 +58,7 @@ struct CustomNavigationBar: View {
                 }
             }, label: {
                 Image(systemName: "magnifyingglass")
-                    .foregroundColor(Color.purple)
+                    .foregroundColor(.mainlPurple)
             })
         }
     }

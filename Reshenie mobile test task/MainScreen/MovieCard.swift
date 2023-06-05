@@ -10,7 +10,7 @@ import SDWebImageSwiftUI
 
 struct MovieCard: View {
     
-    var data: Movie
+    var data: Film
     private let mainBounds = UIScreen.main.bounds.width
     
     @Environment (\.colorScheme) var colorScheme
@@ -27,31 +27,30 @@ struct MovieCard: View {
     
     var body: some View {
         HStack {
-            WebImage(url: URL(string: "data.posterURLPreview"))
+            WebImage(url: URL(string: data.posterURLPreview))
                 .resizable()
-                .placeholder(Image(systemName: "photo"))
+//                .placeholder(Image(systemName: "photo"))
                 .placeholder {
-                    Rectangle().foregroundColor(.gray)
+                    ActivityIndicatorView(size: 20, lineWidth: 2)
                 }
-                .indicator(.activity)
+            
+//                .indicator(.activity)
                 .transition(.fade(duration: 0.5))
                 .scaledToFit()
-            
+
                 .aspectRatio(contentMode: .fill)
                 .frame(width: mainBounds / 7 , height: mainBounds / 5)
                 .clipped()
-                .background(Color.gray)
                 .cornerRadius(10)
                 .padding(10)
             
             VStack(alignment: .leading, spacing: 10) {
                 
-                Text("data.nameRu")
+                Text(data.nameRu)
                     .foregroundColor(Color(UIColor.label))
-                Text("\("data.genres[0].genre") (\("data.year"))")
+                Text("\(data.genres[0].genre) (\(data.year))")
                     .foregroundColor(.gray)
                     .font(.caption)
-                
             }
             
             Spacer()

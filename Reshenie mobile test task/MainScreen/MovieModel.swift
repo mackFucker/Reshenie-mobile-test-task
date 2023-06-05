@@ -1,64 +1,36 @@
 //
-//  ModelMovie.swift
+//  Model.swift
 //  Reshenie mobile test task
 //
-//  Created by дэвид Кихтенко on 03.06.2023.
+//  Created by дэвид Кихтенко on 31.05.2023.
 //
 
 import Foundation
 
-// MARK: - Movie
 struct Movie: Codable {
-    let kinopoiskId: Int
-    let imdbId, nameRu: String
-    let nameEn, nameOriginal: JSONNull?
-    let posterURL, posterURLPreview: String
-    let coverURL, logoURL: String
-    let reviewsCount: Int
-    let ratingGoodReview: Double
-    let ratingGoodReviewVoteCount: Int
-    let ratingKinopoisk: Double
-    let ratingKinopoiskVoteCount: Int
-    let ratingImdb: Double
-    let ratingImdbVoteCount: Int
-    let ratingFilmCritics: JSONNull?
-    let ratingFilmCriticsVoteCount: Int
-    let ratingAwait: JSONNull?
-    let ratingAwaitCount: Int
-    let ratingRFCritics: JSONNull?
-    let ratingRFCriticsVoteCount: Int
-    let webURL: String
-    let year, filmLength: Int
-    let slogan: JSONNull?
-    let description, shortDescription: String
-    let editorAnnotation: JSONNull?
-    let isTicketsAvailable: Bool
-    let productionStatus: JSONNull?
-    let type: String
-    let ratingMPAA: JSONNull?
-    let ratingAgeLimits: String
+    let pagesCount: Int
+    let films: [Film]
+}
+
+// MARK: - Film
+struct Film: Codable {
+    let filmID: Int
+    let nameRu: String
+    let nameEn: String?
+    let year, filmLength: String
     let countries: [Country]
     let genres: [Genre]
-    let startYear, endYear: JSONNull?
-    let serial, shortFilm, completed, hasImax: Bool
-    let has3D: Bool
-    let lastSync: String
+    let rating: String
+    let ratingVoteCount: Int
+    let posterURL, posterURLPreview: String
+    let ratingChange: JSONNull?
 
     enum CodingKeys: String, CodingKey {
-        case kinopoiskId
-        case imdbId
-        case nameRu, nameEn, nameOriginal
-        case posterURL
-        case posterURLPreview
-        case coverURL
-        case logoURL
-        case reviewsCount, ratingGoodReview, ratingGoodReviewVoteCount, ratingKinopoisk, ratingKinopoiskVoteCount, ratingImdb, ratingImdbVoteCount, ratingFilmCritics, ratingFilmCriticsVoteCount, ratingAwait, ratingAwaitCount
-        case ratingRFCritics
-        case ratingRFCriticsVoteCount
-        case webURL
-        case year, filmLength, slogan, description, shortDescription, editorAnnotation, isTicketsAvailable, productionStatus, type
-        case ratingMPAA
-        case ratingAgeLimits, countries, genres, startYear, endYear, serial, shortFilm, completed, hasImax, has3D, lastSync
+        case filmID = "filmId"
+        case nameRu, nameEn, year, filmLength, countries, genres, rating, ratingVoteCount
+        case posterURL = "posterUrl"
+        case posterURLPreview = "posterUrlPreview"
+        case ratingChange
     }
 }
 

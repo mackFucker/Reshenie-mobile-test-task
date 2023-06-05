@@ -8,20 +8,37 @@
 import SwiftUI
 
 struct MainView: View {
+    
     @StateObject private var viewModel = MovieViewModel()
     
     var body: some View {
         NavigationView {
-//            MoviesCollectionView(data: viewModel.searchIsActive ? self.$viewModel.filteredData : self.$viewModel.data)
-//                .animation(.easeIn(duration: 0.2))
-            
-            MoviesCollectionView(data: self.$viewModel.data)
-                .animation(.easeIn(duration: 0.2))
-                .toolbar {
-                    CustomNavigationBar(showSearchBar: $viewModel.searchIsActive,
-                                        searchText: $viewModel.searchText,
-                                        title: "Фильмы")
+            VStack {
+                switch viewModel.appState {
+                    case .loading:
+                    ActivityIndicatorView(size: 50, lineWidth: 5)
+
+                    case .normal:
+                    MoviesCollectionView(data: viewModel.searchIsActive ? self.$viewModel.filteredData : self.$viewModel.data,
+                                         viewModel: viewModel)
+                                    .animation(.easeIn(duration: 0.2))
+                    
+                    case .noConnection:
+                        Image(systemName: "icloud.slash")
+                        Button("Повторить", action: {
+                            print("Повторить")
+                        })
+                        .foregroundColor(.mainlPurple)
+                        .cornerRadius(10)
+                    
+                    case .notFound:
+                        Text("Не найдено")
                 }
+            }.toolbar {
+                CustomNavigationBar(showSearchBar: $viewModel.searchIsActive,
+                                    searchText: $viewModel.searchText,
+                                    title: "Фильмы")
+            }
         }
     }
 }

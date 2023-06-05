@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct MoviesCollectionView : View {
-        
-    @Binding var data : [Movie]
+    
+    @Binding var data : [Film]
+    @StateObject var viewModel: MovieViewModel
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
@@ -17,7 +19,9 @@ struct MoviesCollectionView : View {
             if self.data.count != 0 {
                 
                 ForEach(0..<data.count, id: \.self) { i in
-                    NavigationLink(destination: InDetailView(data: data[i])) {
+                    let imageURL = URL(string: data[i].posterURL)
+
+                    NavigationLink(destination: InDetailView(id: data[i].filmID)) {
                         MovieCard(data: data[i])
                             .padding(.horizontal)
                     }
