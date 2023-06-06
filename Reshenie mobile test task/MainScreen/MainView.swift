@@ -24,7 +24,7 @@ struct MainView: View {
                                     .animation(.easeIn(duration: 0.2))
 
                     case .noConnection:
-                        NoConnectionView()
+                    NoConnectionView(mainReload: viewModel.addSubscriberNetworkManagerFilms)
                     
                     case .notFound:
                         NotFoundView()

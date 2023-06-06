@@ -67,7 +67,7 @@ final class MovieViewModel: ObservableObject {
         }
     }
     
-    private func addSubscriberNetworkManagerFilms() {
+    func addSubscriberNetworkManagerFilms() {
         appState = .loading
         self.networkManager = AnyNetworkManager(manager: NetworkManager(session: URLSession.shared))
         

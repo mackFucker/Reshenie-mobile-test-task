@@ -22,11 +22,15 @@ struct InDetailView: View {
         ZStack {
             switch viewModel.appState {
                 case .loading:
-                ActivityIndicatorView(size: 40, lineWidth: 5)
+                    ActivityIndicatorView(size: 40, lineWidth: 5)
+                
                 case .normal:
                     InDetailMainView(data: viewModel.movie!)
+                
                 case .noConnection:
-                   NoConnectionView()
+                    NoConnectionView(inDetailReload: viewModel.getFilm,
+                                     id: id)
+                
                 case .notFound:
                     NotFoundView()
             }
