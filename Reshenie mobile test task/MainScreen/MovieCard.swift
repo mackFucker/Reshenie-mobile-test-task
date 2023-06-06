@@ -29,12 +29,10 @@ struct MovieCard: View {
         HStack {
             WebImage(url: URL(string: data.posterURLPreview))
                 .resizable()
-//                .placeholder(Image(systemName: "photo"))
                 .placeholder {
                     ActivityIndicatorView(size: 20, lineWidth: 2)
                 }
             
-//                .indicator(.activity)
                 .transition(.fade(duration: 0.5))
                 .scaledToFit()
 

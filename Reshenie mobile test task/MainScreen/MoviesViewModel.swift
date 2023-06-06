@@ -5,7 +5,7 @@
 //  Created by дэвид Кихтенко on 01.06.2023.
 //
 
-import SwiftUI
+import Foundation
 import Combine
 
 enum AppState {
@@ -26,8 +26,7 @@ final class MovieViewModel: ObservableObject {
     private var networkManager: AnyNetworkManager<URLSession>?
     private var token = "0fd0e482-e585-4c4a-bd33-26986a07b728"
     
-    var requestIDs: AnyCancellable?
-    var requestFilms: AnyCancellable?
+    var request: AnyCancellable?
     
     @Published var appState: AppState = .normal
     
@@ -71,7 +70,7 @@ final class MovieViewModel: ObservableObject {
         appState = .loading
         self.networkManager = AnyNetworkManager(manager: NetworkManager(session: URLSession.shared))
         
-        requestIDs = networkManager?.fetch(url: URL(string: "https://kinopoiskapiunofficial.tech/api/v2.2/films/top?type=TOP_250_BEST_FILMS&page=1")!,
+        request = networkManager?.fetch(url: URL(string: "https://kinopoiskapiunofficial.tech/api/v2.2/films/top?type=TOP_250_BEST_FILMS&page=1")!,
                                            method: .get,
                                            headers: ["accept": "application/json",
                                                      "X-API-KEY": "\(token)"])
@@ -91,7 +90,6 @@ final class MovieViewModel: ObservableObject {
             self.appState = .normal
         })
     }
-    
 }
 
 

@@ -6,42 +6,46 @@
 //
 
 import Foundation
+import Combine
+
 
 final class MovieInDetailViewModel: ObservableObject {
 
     @Published var movie: MovieInDetail?
+
+    private var cancellables = Set<AnyCancellable>()
+    private var networkManager: AnyNetworkManager<URLSession>?
+    private var token = "0fd0e482-e585-4c4a-bd33-26986a07b728"
+    
+    var request: AnyCancellable?
+
     @Published var appState: AppState = .loading
 
-    private var token = "0fd0e482-e585-4c4a-bd33-26986a07b728"
-  
+    
     func getFilm(id: Int) {
         appState = .loading
         movie = nil
-        guard let url = URL(string: "https://kinopoiskapiunofficial.tech/api/v2.2/films/\(id)") else { return }
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.addValue("application/json", forHTTPHeaderField: "accept")
-        request.addValue("\(token)", forHTTPHeaderField: "X-API-KEY")
 
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            if let error = error {
-                DispatchQueue.main.async {
-                    self.appState = .noConnection
-                }
-                return
-            }
-
-            do {
-                let decoded = try JSONDecoder().decode(MovieInDetail.self, from: data!)
-                DispatchQueue.main.async {
-                    self.movie = decoded
-                    self.appState = .normal
-                }
-            } catch {
+        self.networkManager = AnyNetworkManager(manager: NetworkManager(session: URLSession.shared))
+        
+        request = networkManager?.fetch(url: URL(string: "https://kinopoiskapiunofficial.tech/api/v2.2/films/\(id)")!,
+                                           method: .get,
+                                           headers: ["accept": "application/json",
+                                                     "X-API-KEY": "\(token)"])
+        .sink(receiveCompletion: { completion in
+            switch completion {
+            case .failure:
                 self.appState = .noConnection
-                print(error.localizedDescription)
+            case .finished:
+                break
             }
-        }.resume()
+        }, receiveValue: { value in
+            let decode = JSONDecoder()
+            let decoded = try? decode.decode(MovieInDetail.self, from: value)
+            
+            let data = decoded
+            self.movie = decoded
+            self.appState = .normal
+        })
     }
-
 }

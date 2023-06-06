@@ -41,7 +41,7 @@ struct InDetailView: View {
                 Image(systemName: "arrow.backward")
                     .foregroundColor(.mainlPurple)
             }
-            .position(x: 25, y: 60)
+            .position(x: 25, y: 50)
         }
         .navigationBarHidden(true)
         .onAppear {
