@@ -13,7 +13,7 @@ struct InDetailView: View {
     @Environment(\.dismiss) private var dismiss
     
     var id: Int
-    @StateObject var viewModel = MovieInDetailViewModel()
+    @StateObject var viewModel = InDetailViewModel()
     
     private let mainBoundsWidht = UIScreen.main.bounds.width
     private let mainBoundsHeight = UIScreen.main.bounds.height
@@ -21,18 +21,20 @@ struct InDetailView: View {
     var body: some View {
         ZStack {
             switch viewModel.appState {
-                case .loading:
-                    ActivityIndicatorView(size: 40, lineWidth: 5)
+            case .loading:
+                ActivityIndicatorView(size: 40, lineWidth: 5)
                 
-                case .normal:
-                    InDetailMainView(data: viewModel.movie!)
+            case .normal:
+                InDetailMainView(data: viewModel.movie!,
+                                 staffData: viewModel.staffData!,
+                                 similarFilms: viewModel.similarsFilms!)
                 
-                case .noConnection:
-                    NoConnectionView(inDetailReload: viewModel.getFilm,
-                                     id: id)
+            case .noConnection:
+                NoConnectionView(inDetailReload: viewModel.getFilm,
+                                 id: id)
                 
-                case .notFound:
-                    NotFoundView()
+            case .notFound:
+                NotFoundView()
             }
             
             Button(action: {
@@ -52,7 +54,10 @@ struct InDetailView: View {
 
 struct InDetailMainView: View {
     
-    var data: MovieInDetail
+    var data: InDetailModel
+    var staffData: StaffModel
+    var similarFilms: [SimilarFilm]?
+    
     private let mainBoundsWidht = UIScreen.main.bounds.width
     private let mainBoundsHeight = UIScreen.main.bounds.height
     
@@ -72,6 +77,7 @@ struct InDetailMainView: View {
             Spacer()
             
             Text(data.nameRu)
+                .font(.title)
                 .bold()
             
             Spacer()
@@ -79,25 +85,25 @@ struct InDetailMainView: View {
             VStack(alignment: .leading) {
                 
                 Text(data.description ?? "" )
-                    .font(.caption)
+                    .font(.callout)
                     .foregroundColor(.gray)
                 
                 Spacer()
                 
-                Text("жанр: ").foregroundColor(.gray).font(.caption).bold() + Text(data.genres[0].genre)
-                    .font(.caption)
+                Text("жанр: ").foregroundColor(.gray).font(.callout).bold() + Text(data.genres[0].genre)
+                    .font(.callout)
                     .foregroundColor(.gray)
                 
                 Spacer()
                 
-                Text("Страны: ").foregroundColor(.gray).font(.caption).bold() + Text(data.countries[0].country)
-                    .font(.caption)
+                Text("Страны: ").foregroundColor(.gray).font(.callout).bold() + Text(data.countries[0].country)
+                    .font(.callout)
                     .foregroundColor(.gray)
                 
                 Spacer()
                 
-                Text("год: ").foregroundColor(.gray).font(.caption).bold() + Text(String(data.year))
-                    .font(.caption)
+                Text("год: ").foregroundColor(.gray).font(.callout).bold() + Text(String(data.year))
+                    .font(.callout)
                     .foregroundColor(.gray)
                 
                 Spacer()
@@ -105,6 +111,28 @@ struct InDetailMainView: View {
             }
             .padding(.trailing)
             .padding(.leading)
+            
+            Spacer()
+            
+            VStack(alignment: .leading){
+                
+                Text("Команда съемки:")
+                    .bold()
+                    .padding(.leading, 10)
+                
+                StaffCollectionView(data: staffData)
+                
+                Spacer()
+                
+                if !similarFilms!.isEmpty {
+                    Text("Похожие фильмы:")
+                        .bold()
+                        .padding(.leading, 10)
+                    
+                    SimilarsFilmsCollectionView(data: similarFilms!)
+                        .padding(.leading, 10)
+                }
+            }
         }
     }
 }

@@ -19,8 +19,6 @@ struct MoviesCollectionView : View {
             if self.data.count != 0 {
                 
                 ForEach(0..<data.count, id: \.self) { i in
-                    let imageURL = URL(string: data[i].posterURL)
-
                     NavigationLink(destination: InDetailView(id: data[i].filmID)) {
                         MovieCard(data: data[i])
                             .padding(.horizontal)

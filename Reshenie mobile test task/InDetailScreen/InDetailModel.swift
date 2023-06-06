@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MovieInDetail: Codable {
+struct InDetailModel: Codable {
     let kinopoiskId: Int?
     let nameRu: String
     let posterUrl: String
