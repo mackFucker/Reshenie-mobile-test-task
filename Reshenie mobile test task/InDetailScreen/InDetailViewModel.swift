@@ -32,6 +32,7 @@ final class MovieInDetailViewModel: ObservableObject {
                     self.appState = .normal
                 }
             } catch {
+                self.appState = .noConnection
                 print(error._code)
             }
         }.resume()

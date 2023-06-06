@@ -36,26 +36,30 @@ final class MovieViewModel: ObservableObject {
         addSubscriberNetworkManagerFilms()
     }
     
-        private func addSubscriberSearch() {
-            $searchText
-                .combineLatest(self.$data)
-                .debounce(for: 0.4, scheduler: DispatchQueue.main)
-                .map(filterFilms)
-                .sink { [weak self] (returnedData) in
-                    if returnedData.isEmpty && !self!.searchText.isEmpty {
-                        self!.appState = .notFound
-                    }
-                    self?.filteredData = returnedData
+    private func addSubscriberSearch() {
+        $searchText
+            .combineLatest(self.$data)
+            .debounce(for: 0.4, scheduler: DispatchQueue.main)
+            .map(filterFilms)
+            .sink { [weak self] (returnedData) in
+                
+                if returnedData.isEmpty && !self!.searchText.isEmpty && self!.appState != .noConnection {
+                    self!.appState = .notFound
                 }
-                .store(in: &cancellables)
-        }
+                if  returnedData.isEmpty && self!.searchText.isEmpty && self!.appState != .noConnection{
+                    self!.appState = .normal
+                }
+                
+                self?.filteredData = returnedData
+            }
+            .store(in: &cancellables)
+    }
     
     private func filterFilms(text: String, films: [Film]) -> [Film] {
         guard !text.isEmpty else {
-            appState = .normal
             return [Film]()
         }
-
+        
         let lowercaseText = text.lowercased()
         
         return films.filter { (film) -> Bool in
@@ -66,25 +70,28 @@ final class MovieViewModel: ObservableObject {
     private func addSubscriberNetworkManagerFilms() {
         appState = .loading
         self.networkManager = AnyNetworkManager(manager: NetworkManager(session: URLSession.shared))
-
+        
         requestIDs = networkManager?.fetch(url: URL(string: "https://kinopoiskapiunofficial.tech/api/v2.2/films/top?type=TOP_250_BEST_FILMS&page=1")!,
                                            method: .get,
                                            headers: ["accept": "application/json",
                                                      "X-API-KEY": "\(token)"])
-
-        .sink(receiveCompletion: {comp in
-            print (comp)},
-              receiveValue: {
-            val in
-
+        .sink(receiveCompletion: { completion in
+            switch completion {
+            case .failure:
+                self.appState = .noConnection
+            case .finished:
+                break
+            }
+        }, receiveValue: { value in
             let decode = JSONDecoder()
-            let decoded = try? decode.decode(Movie.self, from: val)
+            let decoded = try? decode.decode(Movie.self, from: value)
             
             let data = decoded!.films
             self.data = data
             self.appState = .normal
         })
     }
+    
 }
 
 

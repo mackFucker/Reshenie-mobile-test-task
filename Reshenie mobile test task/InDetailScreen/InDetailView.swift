@@ -26,14 +26,9 @@ struct InDetailView: View {
                 case .normal:
                     InDetailMainView(data: viewModel.movie!)
                 case .noConnection:
-                    Image(systemName: "icloud.slash")
-                    Button("Повторить", action: {
-                        print("Повторить")
-                    })
-                    .foregroundColor(.mainlPurple)
-                    .cornerRadius(10)
+                   NoConnectionView()
                 case .notFound:
-                    Text("Не найдено")
+                    NotFoundView()
             }
             
             Button(action: {
