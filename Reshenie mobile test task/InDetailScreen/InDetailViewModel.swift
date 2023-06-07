@@ -44,8 +44,7 @@ final class InDetailViewModel: ObservableObject {
             case .success(let data):
                 self.movie = data
                 self.getStaffData()
-            case .failure(let error):
-                print(error)
+            case .failure(_):
                 self.appState = .noConnection
                 break
             }
@@ -59,8 +58,7 @@ final class InDetailViewModel: ObservableObject {
             case .success(let data):
                 self.staffData = data
                 self.getSimilarData()
-            case .failure(let error):
-                print(error)
+            case .failure(_):
                 self.appState = .noConnection
                 break
             }
@@ -74,8 +72,7 @@ final class InDetailViewModel: ObservableObject {
             case .success(let data):
                 self.similarsFilms = data.items
                 self.appState = .normal
-            case .failure(let error):
-                print(error)
+            case .failure(_):
                 self.appState = .noConnection
                 break
             }

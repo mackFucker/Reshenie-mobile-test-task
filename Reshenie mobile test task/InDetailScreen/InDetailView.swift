@@ -43,6 +43,9 @@ struct InDetailView: View {
             }
             .position(x: 25, y: 50)
         }
+        .onAppear {
+            viewModel.getData()
+        }
         .navigationBarHidden(true)
     }
 }
@@ -123,7 +126,7 @@ struct InDetailMainView: View {
                     Text("Похожие фильмы:")
                         .bold()
                         .padding(.leading, 10)
-
+                    
                     SimilarsFilmsCollectionView(data: similarFilms!)
                 }
             }
