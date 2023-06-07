@@ -198,6 +198,18 @@
 			path = InDetailScreen;
 			sourceTree = "<group>";
 		};
+		8F6522A02A30F9F200151D91 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				8FF8EBFA2A2A3C9B00AAF758 /* AnyNetworkManager.swift */,
+				8FF8EBFC2A2A3D0000AAF758 /* NetworkManager.swift */,
+				8FF8EBFE2A2A3D7300AAF758 /* NetworkManagerProtocol.swift */,
+				8FF8EC002A2A3DB500AAF758 /* URLSessionDataTaskProtocol.swift */,
+				8FF8EC022A2A3DE500AAF758 /* URLSessionProtocol.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
 		8FD161A72A293EBE00839F2D /* CommondStaff */ = {
 			isa = PBXGroup;
 			children = (
@@ -233,11 +245,7 @@
 		8FF8EBF92A2A3C4700AAF758 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				8FF8EBFA2A2A3C9B00AAF758 /* AnyNetworkManager.swift */,
-				8FF8EBFC2A2A3D0000AAF758 /* NetworkManager.swift */,
-				8FF8EBFE2A2A3D7300AAF758 /* NetworkManagerProtocol.swift */,
-				8FF8EC002A2A3DB500AAF758 /* URLSessionDataTaskProtocol.swift */,
-				8FF8EC022A2A3DE500AAF758 /* URLSessionProtocol.swift */,
+				8F6522A02A30F9F200151D91 /* Network */,
 			);
 			path = Services;
 			sourceTree = "<group>";

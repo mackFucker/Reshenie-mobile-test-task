@@ -32,12 +32,13 @@ struct SimilarsFilmsCard: View {
                 .placeholder {
                     ActivityIndicatorView(size: 35, lineWidth: 3)
                 }
-                .scaledToFit()
+                .scaledToFill()
             
                 .aspectRatio(contentMode: .fill)
-                .frame(width: mainBoundsWidht / 2.5, height: mainBoundsWidht / 2)
+                .frame(width: mainBoundsWidht / 2, height: mainBoundsWidht / 1.5)
+                .padding()
                 .clipped()
-            
+                .cornerRadius(10)
             VStack(alignment: .leading, spacing: 10) {
                 
                 Text(data.nameRu)
@@ -48,7 +49,7 @@ struct SimilarsFilmsCard: View {
             Spacer()
             
         }
-        .frame(width: mainBoundsWidht / 2.5)
+        .frame(width: mainBoundsWidht / 2)
         .background(backgroundColor)
         .cornerRadius(10)
         .shadow(radius: 10)

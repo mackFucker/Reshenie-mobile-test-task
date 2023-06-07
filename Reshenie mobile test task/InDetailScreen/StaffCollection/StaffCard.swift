@@ -30,7 +30,7 @@ struct StaffCard: View {
                 .placeholder {
                     ActivityIndicatorView(size: 35, lineWidth: 3)
                 }
-                .scaledToFit()
+                .scaledToFill()
             
                 .aspectRatio(contentMode: .fill)
                 .frame(width: mainBoundsWidht / 2.5, height: mainBoundsWidht / 2)

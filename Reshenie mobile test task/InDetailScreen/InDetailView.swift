@@ -64,12 +64,14 @@ struct InDetailMainView: View {
             WebImage(url: URL(string: data.posterUrl))
                 .resizable()
                 .placeholder {
-                    ActivityIndicatorView(size: 35, lineWidth: 3)
+                    ActivityIndicatorView(size: 35,
+                                          lineWidth: 3)
                 }
                 .scaledToFit()
             
                 .aspectRatio(contentMode: .fill)
-                .frame(width: mainBoundsWidht, height: mainBoundsWidht * 1.5)
+                .frame(width: mainBoundsWidht,
+                       height: mainBoundsWidht * 1.5)
                 .clipped()
             
             Spacer()
@@ -88,19 +90,31 @@ struct InDetailMainView: View {
                 
                 Spacer()
                 
-                Text("жанр: ").foregroundColor(.gray).font(.callout).bold() + Text(data.genres[0].genre)
+                Text("жанр: ")
+                    .foregroundColor(.gray)
+                    .font(.callout)
+                    .bold()
+                + Text(data.genres[0].genre)
                     .font(.callout)
                     .foregroundColor(.gray)
                 
                 Spacer()
                 
-                Text("Страны: ").foregroundColor(.gray).font(.callout).bold() + Text(data.countries[0].country)
+                Text("Страны: ")
+                    .foregroundColor(.gray)
+                    .font(.callout)
+                    .bold()
+                + Text(data.countries[0].country)
                     .font(.callout)
                     .foregroundColor(.gray)
                 
                 Spacer()
                 
-                Text("год: ").foregroundColor(.gray).font(.callout).bold() + Text(String(data.year))
+                Text("год: ")
+                    .foregroundColor(.gray)
+                    .font(.callout)
+                    .bold()
+                + Text(String(data.year))
                     .font(.callout)
                     .foregroundColor(.gray)
                 

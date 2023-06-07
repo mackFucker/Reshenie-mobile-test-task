@@ -16,11 +16,6 @@ struct StaffCollectionView: View {
             LazyHGrid(rows: [gridItem]) {
                 ForEach(0..<data.count, id: \.self) { i in
                     StaffCard(data: data[i])
-
-//                    NavigationLink(destination: InDetailView(id: data[i])) {
-//                        StaffCard()
-//                            .padding(.horizontal)
-//                    }
                 }
             }
             .padding()

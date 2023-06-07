@@ -10,7 +10,6 @@ import SwiftUI
 struct MainView: View {
     
     @StateObject private var viewModel = MovieViewModel()
-    private var url = "https://kinopoiskapiunofficial.tech/api/v2.2/films/top?type=TOP_250_BEST_FILMS&page=1"
     
     var body: some View {
         NavigationView {

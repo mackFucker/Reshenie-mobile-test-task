@@ -38,8 +38,8 @@ final class InDetailViewModel: ObservableObject {
     
     func getData() {
         appState = .loading
-        networkManager.NetworkManagerGetData(url: urlFilm) { (result: Result<InDetailModel,
-                                                              Error>) in
+        networkManager.NetworkManagerGetData(url: urlFilm) {
+            (result: Result<InDetailModel, Error>) in
             switch result {
             case .success(let data):
                 self.movie = data
@@ -52,8 +52,8 @@ final class InDetailViewModel: ObservableObject {
     }
     
     private func getStaffData() {
-        networkManager.NetworkManagerGetData(url: urlStaff){ (result: Result<StaffModel,
-                                                              Error>) in
+        networkManager.NetworkManagerGetData(url: urlStaff) {
+            (result: Result<StaffModel, Error>) in
             switch result {
             case .success(let data):
                 
@@ -68,9 +68,7 @@ final class InDetailViewModel: ObservableObject {
                         return modifiedElement
                     }
                 }
-                for i in modifiedData {
-                    print(i.professionText)
-                }
+                
                 self.staffData = modifiedData
                 self.getSimilarData()
             case .failure(_):
@@ -81,8 +79,8 @@ final class InDetailViewModel: ObservableObject {
     }
     
     private func getSimilarData() {
-        networkManager.NetworkManagerGetData(url: urlSimilar){ (result: Result<SimilarFilms,
-                                                                Error>) in
+        networkManager.NetworkManagerGetData(url: urlSimilar) {
+            (result: Result<SimilarFilms, Error>) in
             switch result {
             case .success(let data):
                 self.similarsFilms = data.items

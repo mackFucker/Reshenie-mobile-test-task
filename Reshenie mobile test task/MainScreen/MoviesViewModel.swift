@@ -52,7 +52,8 @@ final class MovieViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    private func filterFilms(text: String, films: [Film]) -> [Film] {
+    private func filterFilms(text: String,
+                             films: [Film]) -> [Film] {
         guard !text.isEmpty else {
             return [Film]()
         }
