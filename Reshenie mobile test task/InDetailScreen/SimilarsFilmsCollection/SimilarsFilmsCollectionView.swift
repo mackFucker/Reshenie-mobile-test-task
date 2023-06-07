@@ -15,12 +15,9 @@ struct SimilarsFilmsCollectionView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHGrid(rows: [gridItem]) {
                 ForEach(0..<data.count, id: \.self) { i in
-                    SimilarsFilmsCard(data: data[i])
-
-//                    NavigationLink(destination: InDetailView(id: data[i])) {
-//                        StaffCard()
-//                            .padding(.horizontal)
-//                    }
+                    NavigationLink(destination: InDetailView(viewModel: InDetailViewModel(id: data[i].filmId))) {
+                        SimilarsFilmsCard(data: data[i])
+                    }
                 }
             }
             .padding()

@@ -12,7 +12,7 @@ struct StaffModelElement: Codable {
     let staffId: Int
     let nameRu: String
     let posterUrl: String
-    let professionText: String
+    var professionText: String
 }
 
 typealias StaffModel = [StaffModelElement]

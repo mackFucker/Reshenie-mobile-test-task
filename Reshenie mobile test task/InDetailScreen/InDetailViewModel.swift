@@ -23,7 +23,7 @@ final class InDetailViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     
     private var token = "0fd0e482-e585-4c4a-bd33-26986a07b728"
-
+    
     var request: AnyCancellable?
     var networkManager = AnyNetworkManager<URLSession>(manager: NetworkManager(session: URLSession.shared))
     
@@ -39,7 +39,7 @@ final class InDetailViewModel: ObservableObject {
     func getData() {
         appState = .loading
         networkManager.NetworkManagerGetData(url: urlFilm) { (result: Result<InDetailModel,
-                                                                         Error>) in
+                                                              Error>) in
             switch result {
             case .success(let data):
                 self.movie = data
@@ -53,10 +53,25 @@ final class InDetailViewModel: ObservableObject {
     
     private func getStaffData() {
         networkManager.NetworkManagerGetData(url: urlStaff){ (result: Result<StaffModel,
-                                                                         Error>) in
+                                                              Error>) in
             switch result {
             case .success(let data):
-                self.staffData = data
+                
+                let modifiedData = data.map { element in
+                    var modifiedElement = element
+                    if modifiedElement.professionText == "Режиссеры дубляжа" {
+                        modifiedElement.professionText = "Режиссер дубляжа"
+                        return modifiedElement
+                    }
+                    else {
+                        modifiedElement.professionText.removeLast()
+                        return modifiedElement
+                    }
+                }
+                for i in modifiedData {
+                    print(i.professionText)
+                }
+                self.staffData = modifiedData
                 self.getSimilarData()
             case .failure(_):
                 self.appState = .noConnection
@@ -67,7 +82,7 @@ final class InDetailViewModel: ObservableObject {
     
     private func getSimilarData() {
         networkManager.NetworkManagerGetData(url: urlSimilar){ (result: Result<SimilarFilms,
-                                                                           Error>) in
+                                                                Error>) in
             switch result {
             case .success(let data):
                 self.similarsFilms = data.items
