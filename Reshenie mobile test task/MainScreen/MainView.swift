@@ -10,26 +10,28 @@ import SwiftUI
 struct MainView: View {
     
     @StateObject private var viewModel = MovieViewModel()
+    private var url = "https://kinopoiskapiunofficial.tech/api/v2.2/films/top?type=TOP_250_BEST_FILMS&page=1"
     
     var body: some View {
         NavigationView {
             VStack {
                 switch viewModel.appState {
-                    case .loading:
+                case .loading:
                     ActivityIndicatorView(size: 50, lineWidth: 5)
-
-                    case .normal:
+                    
+                case .normal:
                     MoviesCollectionView(data: viewModel.searchIsActive ? self.$viewModel.filteredData : self.$viewModel.data,
                                          viewModel: viewModel)
-                                    .animation(.easeIn(duration: 0.2))
-
-                    case .noConnection:
-                    NoConnectionView(mainReload: viewModel.addSubscriberNetworkManagerFilms)
+                    .animation(.easeIn(duration: 0.2))
                     
-                    case .notFound:
-                        NotFoundView()
+                case .noConnection:
+                    NoConnectionView(reload: viewModel.getData)
+                    
+                case .notFound:
+                    NotFoundView()
                 }
-            }.toolbar {
+            }
+            .toolbar {
                 CustomNavigationBar(showSearchBar: $viewModel.searchIsActive,
                                     searchText: $viewModel.searchText,
                                     title: "Фильмы")

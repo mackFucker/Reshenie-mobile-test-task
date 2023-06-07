@@ -21,18 +21,16 @@ final class MovieViewModel: ObservableObject {
     @Published var filteredData: [Film] = []
     @Published var searchText = ""
     @Published var searchIsActive = false
-    
-    private var cancellables = Set<AnyCancellable>()
-    private var networkManager: AnyNetworkManager<URLSession>?
-    private var token = "0fd0e482-e585-4c4a-bd33-26986a07b728"
-    
-    var request: AnyCancellable?
-    
     @Published var appState: AppState = .normal
+
+    private var cancellables = Set<AnyCancellable>()
+    var networkManager = AnyNetworkManager<URLSession>(manager: NetworkManager(session: URLSession.shared))
+
+    private let url = "https://kinopoiskapiunofficial.tech/api/v2.2/films/top?type=TOP_250_BEST_FILMS&page=1"
     
     init() {
         addSubscriberSearch()
-        addSubscriberNetworkManagerFilms()
+        getData()
     }
     
     private func addSubscriberSearch() {
@@ -66,29 +64,21 @@ final class MovieViewModel: ObservableObject {
         }
     }
     
-    func addSubscriberNetworkManagerFilms() {
+    func getData() {
         appState = .loading
-        self.networkManager = AnyNetworkManager(manager: NetworkManager(session: URLSession.shared))
-        
-        request = networkManager?.fetch(url: URL(string: "https://kinopoiskapiunofficial.tech/api/v2.2/films/top?type=TOP_250_BEST_FILMS&page=1")!,
-                                           method: .get,
-                                           headers: ["accept": "application/json",
-                                                     "X-API-KEY": "\(token)"])
-        .sink(receiveCompletion: { completion in
-            switch completion {
-            case .failure:
-                self.appState = .noConnection
-            case .finished:
-                break
+        networkManager.NetworkManagerGetData(url: url) { (result: Result<Movie,
+                                                                     Error>) in
+            switch result {
+                case .success(let data):
+                    self.appState = .normal
+                    self.data = data.films
+                    return
+                case .failure(let error):
+                    print(error)
+                    self.appState = .noConnection
+                    break
             }
-        }, receiveValue: { value in
-            let decode = JSONDecoder()
-            let decoded = try? decode.decode(Movie.self, from: value)
-            
-            let data = decoded!.films
-            self.data = data
-            self.appState = .normal
-        })
+        }
     }
 }
 

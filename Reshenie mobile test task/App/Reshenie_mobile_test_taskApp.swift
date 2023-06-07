@@ -11,7 +11,7 @@ import SwiftUI
 struct Reshenie_mobile_test_taskApp: App {
     var body: some Scene {
         WindowGroup {
-            InDetailView(id: 435, viewModel: InDetailViewModel())
+            MainView()
         }
     }
 }

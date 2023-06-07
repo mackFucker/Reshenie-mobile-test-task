@@ -12,8 +12,7 @@ struct InDetailView: View {
     
     @Environment(\.dismiss) private var dismiss
     
-    var id: Int
-    @StateObject var viewModel = InDetailViewModel()
+    @ObservedObject var viewModel: InDetailViewModel
     
     private let mainBoundsWidht = UIScreen.main.bounds.width
     private let mainBoundsHeight = UIScreen.main.bounds.height
@@ -27,11 +26,10 @@ struct InDetailView: View {
             case .normal:
                 InDetailMainView(data: viewModel.movie!,
                                  staffData: viewModel.staffData!,
-                                 similarFilms: viewModel.similarsFilms!)
+                                 similarFilms: viewModel.similarsFilms)
                 
             case .noConnection:
-                NoConnectionView(inDetailReload: viewModel.getFilm,
-                                 id: id)
+                NoConnectionView(reload: viewModel.getData)
                 
             case .notFound:
                 NotFoundView()
@@ -46,9 +44,6 @@ struct InDetailView: View {
             .position(x: 25, y: 50)
         }
         .navigationBarHidden(true)
-        .onAppear {
-            viewModel.getFilm(id: id)
-        }
     }
 }
 
@@ -128,9 +123,8 @@ struct InDetailMainView: View {
                     Text("Похожие фильмы:")
                         .bold()
                         .padding(.leading, 10)
-                    
+
                     SimilarsFilmsCollectionView(data: similarFilms!)
-                        .padding(.leading, 10)
                 }
             }
         }

@@ -14,87 +14,71 @@ final class InDetailViewModel: ObservableObject {
     @Published var movie: InDetailModel?
     @Published var staffData: StaffModel?
     @Published var similarsFilms: [SimilarFilm]?
-    @Published var appState: AppState = .loading
-
+    @Published var appState: AppState = .normal
+    @Published var id: Int
+    
+    private let urlFilm: String
+    private let urlStaff: String
+    private let urlSimilar: String
     private var cancellables = Set<AnyCancellable>()
-    private var networkManager: AnyNetworkManager<URLSession>?
+    
     private var token = "0fd0e482-e585-4c4a-bd33-26986a07b728"
-    
+
     var request: AnyCancellable?
-
-    func getFilm(id: Int) {
+    var networkManager = AnyNetworkManager<URLSession>(manager: NetworkManager(session: URLSession.shared))
+    
+    init(id: Int) {
+        self.id = id
+        urlFilm = "https://kinopoiskapiunofficial.tech/api/v2.2/films/\(id)"
+        urlStaff = "https://kinopoiskapiunofficial.tech/api/v1/staff?filmId=\(id)"
+        urlSimilar = "https://kinopoiskapiunofficial.tech/api/v2.2/films/\(id)/similars"
         
+        self.getData()
+    }
+    
+    func getData() {
         appState = .loading
-        movie = nil
-
-        self.networkManager = AnyNetworkManager(manager: NetworkManager(session: URLSession.shared))
-        
-        request = networkManager?.fetch(url: URL(string: "https://kinopoiskapiunofficial.tech/api/v2.2/films/\(id)")!,
-                                           method: .get,
-                                           headers: ["accept": "application/json",
-                                                     "X-API-KEY": "\(token)"])
-        .sink(receiveCompletion: { completion in
-            switch completion {
-            case .failure:
+        networkManager.NetworkManagerGetData(url: urlFilm) { (result: Result<InDetailModel,
+                                                                         Error>) in
+            switch result {
+            case .success(let data):
+                self.movie = data
+                self.getStaffData()
+            case .failure(let error):
+                print(error)
                 self.appState = .noConnection
-            case .finished:
-                self.getStaffData(id: id)
                 break
             }
-        }, receiveValue: { value in
-            let decode = JSONDecoder()
-            let decoded = try? decode.decode(InDetailModel.self, from: value)
-            
-            self.movie = decoded
-        })
-        
+        }
     }
     
-    func getStaffData(id: Int) {
-
-        self.networkManager = AnyNetworkManager(manager: NetworkManager(session: URLSession.shared))
-        
-        request = networkManager?.fetch(url: URL(string: "https://kinopoiskapiunofficial.tech/api/v1/staff?filmId=\(id)")!,
-                                           method: .get,
-                                           headers: ["accept": "application/json",
-                                                     "X-API-KEY": "\(token)"])
-        .sink(receiveCompletion: { completion in
-            switch completion {
-            case .failure:
+    private func getStaffData() {
+        networkManager.NetworkManagerGetData(url: urlStaff){ (result: Result<StaffModel,
+                                                                         Error>) in
+            switch result {
+            case .success(let data):
+                self.staffData = data
+                self.getSimilarData()
+            case .failure(let error):
+                print(error)
                 self.appState = .noConnection
-            case .finished:
-                self.getSimilarsData(id: id)
                 break
             }
-        }, receiveValue: { value in
-            let decode = JSONDecoder()
-            let decoded = try? decode.decode(StaffModel.self, from: value)
-            
-            self.staffData = decoded!
-        })
+        }
     }
     
-    func getSimilarsData(id: Int) {
-
-        self.networkManager = AnyNetworkManager(manager: NetworkManager(session: URLSession.shared))
-        
-        request = networkManager?.fetch(url: URL(string: "https://kinopoiskapiunofficial.tech/api/v2.2/films/\(id)/similars")!,
-                                           method: .get,
-                                           headers: ["accept": "application/json",
-                                                     "X-API-KEY": "\(token)"])
-        .sink(receiveCompletion: { completion in
-            switch completion {
-            case .failure:
-                self.appState = .noConnection
-            case .finished:
+    private func getSimilarData() {
+        networkManager.NetworkManagerGetData(url: urlSimilar){ (result: Result<SimilarFilms,
+                                                                           Error>) in
+            switch result {
+            case .success(let data):
+                self.similarsFilms = data.items
                 self.appState = .normal
+            case .failure(let error):
+                print(error)
+                self.appState = .noConnection
                 break
             }
-        }, receiveValue: { value in
-            let decode = JSONDecoder()
-            let decoded = try? decode.decode(SimilarFilms.self, from: value)
-
-            self.similarsFilms = decoded?.items
-        })
+        }
     }
 }
